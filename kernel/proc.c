@@ -138,6 +138,8 @@ found:
     return 0;
   }
 
+  p->usyscall->pid = p->pid;
+
   // An empty user page table.
   p->pagetable = proc_pagetable(p);
   if(p->pagetable == 0){
@@ -258,7 +260,7 @@ growproc(int n)
 
   sz = p->sz;
   if(n > 0){
-    if(sz + n > USYSCALL) {
+    if(sz + n >= USYSCALL) {
       return -1;
     }
     if((sz = uvmalloc(p->pagetable, sz, sz + n, PTE_W)) == 0) {
